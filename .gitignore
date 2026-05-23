@@ -234,3 +234,6 @@ PROCAR
 REPORT
 PCDAT
 vasprun.xml
+
+ENCUT_*
+KPTS_*
