@@ -1,0 +1,9 @@
+System = fcc Si
+
+ICHARG = 11     ! read CHGCAR file and keep density fixed
+
+ENCUT  = 240
+ISMEAR = 0
+SIGMA  = 0.1
+
+LORBIT = 11
