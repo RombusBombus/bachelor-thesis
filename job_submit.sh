@@ -22,7 +22,7 @@ if [ ! -d "$WORKDIR" ]; then
 fi
 
 module use /home/atuin/b299bb/b299bb11/TheoFEM/Modules/
-module load VASP/6.6.0_intel
+module load VASP/6.6.0_intel_hdf5
 
 cd $SLURM_SUBMIT_DIR
 
