@@ -1,0 +1,39 @@
+### Starting TaskPrologue of job 3614365 on f1015 at Sun May 24 15:18:16 CEST 2026
+#   SLURM_JOB_NODELIST=f[1015,1017,1034,1039]
+#   SLURM_JOB_NUM_NODES=4
+#   SLURM_NTASKS=288
+#   SLURM_NPROCS=288
+#   SLURM_TASKS_PER_NODE=72(x4)
+#   SLURM_JOB_CPUS_PER_NODE=72(x4)
+#   SLURM_EXPORT_ENV=NONE
+Running on cores 0-71 with governor powersave
+### Finished TaskPrologue
+Loading VASP/6.6.0_intel_hdf5
+  Loading requirement: intel/2023.2.1 mkl/2023.2.0 intelmpi/2021.10.0
+    hdf5/1.14.5-impi-intel
+=== JOB_STATISTICS ===
+=== current date     : Sun May 24 15:29:20 CEST 2026
+= Job-ID             : 3614365 on fritz
+= Job-Name           : job_submit.sh
+= Job-Command        : ../../job_submit.sh
+= Initial workdir    : /home/hpc/b299bb/b299bb25/bachelor-thesis/encut_convergence/encut_800
+= Queue/Partition    : multinode
+= Slurm account      : b299bb with QOS=normal
+= Features           : el8
+= Requested resources:  for 02:00:00
+= Elapsed runtime    : 00:11:05
+= Total RAM usage    : 99.3 GiB 
+= Node list          : f[1015,1017,1034,1039]
+= Subm/Elig/Start/End: 2026-05-24T15:18:13 / 2026-05-24T15:18:13 / 2026-05-24T15:18:14 / 2026-05-24T15:29:19
+======================
+=== Quota infos ======
+    Path                 Used     SoftQ    HardQ    Gracetime  Filec    FileQ    FiHaQ    FileGrace    
+    /home/hpc            1760.1M   104.9G   209.7G        N/A  13,308      500K   1,000K        N/A    
+    /home/vault             0.0K  1048.6G  2097.2G        N/A       1      200K     400K        N/A    
+    /home/atuin             0.0K     0.0K     0.0K        N/A       1                           N/A    
+    /lustre                 4.0K     0.0K     0.0K        N/A       1       80K     250K        N/A    
+======================
+=== Network traffic stats (does not include Infiniband) ======
+= HPC internal traffic (e.g. to fileservers): 0 GB in / 0 GB out
+= External traffic: 0 GB in / 0 GB out
+======================

@@ -31,3 +31,25 @@ for encut in encut_values:
     # move the generated input files to the corresponding folder
     for filename in ["INCAR", "POSCAR", "POTCAR", "KPOINTS"]:
         os.rename(filename, folder / filename)
+
+
+kpoints_values = [1, 2, 3, 4, 5, 6, 7, 8]
+
+for kpoints in kpoints_values:
+    calc = Vasp(
+        xc="PBE",
+        encut=300,
+        # kspacing=0.25,
+        kpts=(kpoints, kpoints, kpoints),
+        ibrion=-1,
+    )
+    atoms.calc = calc
+
+    folder = Path("kpoints_convergence") / f"kpoints_{kpoints}"
+    os.makedirs(folder, exist_ok=True)
+
+    calc.write_input(atoms)
+
+    # move the generated input files to the corresponding folder
+    for filename in ["INCAR", "POSCAR", "POTCAR", "KPOINTS"]:
+        os.rename(filename, folder / filename)

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 if __name__ == "__main__":
-    folder = Path("encut_convergence")
+    folder = Path("kpoints_convergence")
     subfolders = [f for f in folder.iterdir() if f.is_dir()]
 
     for subfolder in subfolders:
