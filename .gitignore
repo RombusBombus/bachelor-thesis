@@ -217,23 +217,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# VASP files
-POTCAR
-WAVECAR
-CHGCAR
-OSZICAR
-CONTCAR
-IBZKPT
-EIGENVAL
-OUTCAR
-XDATCAR
-CHG
-CHGCAR
-DOSCAR
-PROCAR
-REPORT
-PCDAT
-vasprun.xml
-
-ENCUT_*
-KPTS_*
+# folders with results
+encut_convergence/
+kpoints_convergence/
+relaxation/
