@@ -7,6 +7,20 @@
 
 unset SLURM_EXPORT_ENV
 
+# Check that a directory argument was provided
+if [ $# -ne 1 ]; then
+    echo "Usage: sbatch $0 <vasp_workdir>"
+    exit 1
+fi
+
+WORKDIR="$1"
+
+# Check that the directory exists
+if [ ! -d "$WORKDIR" ]; then
+    echo "Error: Directory '$WORKDIR' does not exist."
+    exit 1
+fi
+
 module use /home/atuin/b299bb/b299bb11/TheoFEM/Modules/
 module load VASP/6.6.0_intel
 
