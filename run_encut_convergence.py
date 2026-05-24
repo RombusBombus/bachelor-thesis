@@ -8,4 +8,4 @@ if __name__ == "__main__":
 
     for subfolder in subfolders:
         print(f"Running VASP in {subfolder}...")
-        os.system("job_submit.sh " + str(subfolder))
+        os.system("./job_submit.sh " + str(subfolder))
