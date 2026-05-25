@@ -36,9 +36,9 @@ calc = Vasp(
     ismear=ISMEAR,
     sigma=SIGMA,
     prec=PREC,
-    lwave=False,                # keine WAVE-Datei nach Relaxation
-    lcharg=False,               # keine CHGCAR-Datei
-    directory='.',              # schreibe Dateien in aktuelles Verzeichnis
+    lwave=True,                # keine WAVE-Datei nach Relaxation
+    lcharg=True,               # keine CHGCAR-Datei
+    directory='relaxation',              # schreibe Dateien in aktuelles Verzeichnis
     # Optional: Wenn deine POTCARs anders organisiert sind, kannst du
     # setup_paths = {'Element': '/pfad/zur/POTCAR'} nutzen.
 )
@@ -46,18 +46,4 @@ calc = Vasp(
 # 3. Alle Eingabedateien erzeugen (INCAR, KPOINTS, POSCAR, POTCAR)
 calc.write_input(atoms)
 
-print("VASP-Eingabedateien wurden erfolgreich erstellt (INCAR, KPOINTS, POSCAR, POTCAR).")
-
-# bewege dateien in relaxationsordner
-import shutil
-import os
-
-if not os.path.exists('relaxation'):
-    os.makedirs('relaxation')
-shutil.move('INCAR', 'relaxation/INCAR')
-shutil.move('KPOINTS', 'relaxation/KPOINTS')
-shutil.move('POSCAR', 'relaxation/POSCAR')
-shutil.move('POTCAR', 'relaxation/POTCAR')
-
-
-print("Starte nun die Relaxation mit deinem VASP-Jobskript.")
+print("Alle Eingabedateien für die Relaxation wurden erstellt.")
