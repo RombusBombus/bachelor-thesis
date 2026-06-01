@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
         # Change to the subfolder and launch the job_submit.sh script
         os.chdir(subfolder.absolute())
-        os.system("sbatch ../../job_submit.sh")
+        os.system("sbatch ../../job_submit_vasp.sh")
         os.chdir("../../")  # Change back to the original directory

@@ -11,15 +11,19 @@ load_dotenv()  # Load environment variables from .env file
 atoms = read("TaCuN2_unrelaxed.cif")
 view(atoms)
 
-encut_values = [300, 350, 400, 450, 500, 600, 700, 800]
+encut_values = [100, 200, 300, 350, 400, 450, 500]
 
 for encut in encut_values:
     calc = Vasp(
         xc="PBE",
         encut=encut,
-        # kspacing=0.25,
         kpts=(4, 4, 4),
         ibrion=-1,
+        kpar=8,
+        ncore=8,
+        ismear=0,
+        sigma=0.03,
+        ISYM=-1
     )
     atoms.calc = calc
 
@@ -42,6 +46,8 @@ for kpoints in kpoints_values:
         # kspacing=0.25,
         kpts=(kpoints, kpoints, kpoints),
         ibrion=-1,
+        kpar=8,
+        ncore=8
     )
     atoms.calc = calc
 

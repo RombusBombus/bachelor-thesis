@@ -9,7 +9,7 @@
 
 unset SLURM_EXPORT_ENV
 
-module use /home/atuin/b299bb/b299bb11/TheoFEM/Modules/
+module use /home/atuin/b299bb/TheoFEM/Modules/
 module load VASP/6.6.0_intel_hdf5
 
 module load julia
