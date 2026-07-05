@@ -223,3 +223,13 @@ kpoints_convergence/
 relaxation/
 
 bachelor-thesis/
+
+/cluster_results
+/encut_convergence
+/kpoints_convergence
+
+
+secret.txt
+
+/nscf-bands
+/relaxation
