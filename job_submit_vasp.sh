@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-# SBATCH --job-name=vasp_job
-# SBATCH --nodes=4
-# SBATCH --ntasks-per-node=72
-# SBATCH --time=2:00:00
-# SBATCH --export=NONE
-# SBATCH --mail-user=neumeier.nicolas.1@gmail.com
-# SBATCH --email-type=ALL
+#SBATCH --job-name=vasp_job
+#SBATCH --nodes=4
+#SBATCH --ntasks-per-node=72
+#SBATCH --time=2:00:00
+#SBATCH --export=NONE
+#SBATCH --mail-user=neumeier.nicolas.1@gmail.com
+#SBATCH --mail-type=ALL
 
 unset SLURM_EXPORT_ENV
 

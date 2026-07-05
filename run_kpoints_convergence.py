@@ -10,7 +10,17 @@ if __name__ == "__main__":
 
         print(subfolder.absolute())
 
-        # Change to the subfolder and launch the job_submit.sh script
-        os.chdir(subfolder.absolute())
-        os.system("sbatch ../../job_submit.sh")
-        os.chdir("../../")  # Change back to the original directory
+        # Change to the subfolder and launch the job_submit.sh script, capturing stdout
+        prev_cwd = Path.cwd()
+        try:
+            os.chdir(subfolder.absolute())
+            import subprocess
+
+            result = subprocess.run(["sbatch", "../../job_submit_vasp.sh"], capture_output=True, text=True)
+            # Print stdout and stderr (if any)
+            if result.stdout:
+                print(result.stdout.strip())
+            if result.stderr:
+                print(result.stderr.strip())
+        finally:
+            os.chdir(prev_cwd)  # Change back to the original directory

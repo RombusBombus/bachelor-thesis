@@ -2,29 +2,38 @@ from ase.io import read
 from ase.calculators.vasp import Vasp
 from dotenv import load_dotenv
 
-load_dotenv()  # .env-Datei laden, um Umgebungsvariablen zu setzen
+load_dotenv()  # .env-Datei laden, um Umgebungsvariablen zu setzen (VASP_PP_PATH)
 
-# ===== Benutzereingaben (bitte an deine Werte anpassen) =====
-ENCUT = 400                     # aus deinem ENCUT-Test (eV)
-KPOINTS_MESH = (8, 8, 8)       # aus deinem KPOINTS-Test (Monkhorst-Pack, gamma-zentriert)
+# ===== Parameter (auf das System TaCuN2 abgestimmt) =====
+# Ebenenzahl / ENCUT:
+# Haertester POTCAR ist N mit ENMAX = 400 eV. Fuer eine Volumenrelaxation
+# (ISIF = 3) sollte ENCUT ~ 1.3 x ENMAX gewaehlt werden, um den Pulay-Stress
+# klein zu halten -> 1.3 * 400 = 520 eV.
+ENCUT = 520
 
-# Optionale Relaxationsparameter (können auch so bleiben)
-ISIF = 3          # relaxiere Zellform und Volumen
-EDIFF = 1e-6      # Energiekonvergenz (eV)
-EDIFFG = -0.02    # Kraftkonvergenz (eV/Å)
+# k-Punkte: Die Zelle ist stark anisotrop (a = b = 3.15 A, c = 17.54 A).
+# Reziprok ist die c-Achse ~6x kuerzer als a/b, daher ein anisotropes,
+# Gamma-zentriertes Netz (Gamma-zentriert ist fuer hexagonale Symmetrie noetig).
+KPOINTS_MESH = (9, 9, 2)
+
+# Relaxationsparameter
+ISIF = 3          # relaxiere Ionen, Zellform und Volumen
+EDIFF = 1e-6      # Energiekonvergenz SCF (eV)
+EDIFFG = -0.01    # Kraftkonvergenz (eV/A)
 NSW = 100         # maximale Ionen-Schritte
 IBRION = 2        # konjugierter Gradient
-ISMEAR = 0        # Gaussian-Besetzung (für Metalle/Halbleiter)
+ISMEAR = 0        # Gaussian-Verschmierung (Halbleiter/isolierend)
 SIGMA = 0.05      # Verbreiterung (eV)
 PREC = "Accurate" # Genauigkeitsstufe
+LREAL = False     # reziproke Projektion (genau, kleine Zelle mit 12 Atomen)
 XC = 'PBE'        # Austausch-Korrelationsfunktional
 
-# Parallelisierung (1 Knoten = 72 Kerne auf Fritz)
-KPAR = 6          # k-Punkt-Parallelisierung (72 = 6 x 12 Ranks)
-NCORE = 4         # Kerne pro Band (12 / 4 = 3 Band-Gruppen)
+# Parallelisierung (an die verwendete Maschine anpassen)
+KPAR = 8          # k-Punkt-Parallelisierung
+NCORE = 8         # Kerne pro Band
 
 # ===== Dateien schreiben =====
-# 1. POSCAR einlesen (muss im aktuellen Ordner existieren)
+# 1. Struktur einlesen
 atoms = read("TaCuN2_unrelaxed.cif")
 
 # 2. VASP-Kalkulator konfigurieren
@@ -32,6 +41,7 @@ calc = Vasp(
     encut=ENCUT,
     xc=XC,
     kpts=KPOINTS_MESH,          # ASE erzeugt daraus eine KPOINTS-Datei
+    gamma=True,                 # Gamma-zentriertes Netz
     isif=ISIF,
     ediff=EDIFF,
     ediffg=EDIFFG,
@@ -40,16 +50,15 @@ calc = Vasp(
     ismear=ISMEAR,
     sigma=SIGMA,
     prec=PREC,
+    lreal=LREAL,
     kpar=KPAR,
     ncore=NCORE,
-    lwave=True,                # keine WAVE-Datei nach Relaxation
-    lcharg=True,               # keine CHGCAR-Datei
-    directory='relaxation',              # schreibe Dateien in aktuelles Verzeichnis
-    # Optional: Wenn deine POTCARs anders organisiert sind, kannst du
-    # setup_paths = {'Element': '/pfad/zur/POTCAR'} nutzen.
+    lwave=True,                 # WAVECAR schreiben (fuer Restart aus CONTCAR)
+    lcharg=True,                # CHGCAR schreiben
+    directory='relaxation',     # Eingabedateien nach relaxation/ schreiben
 )
 
 # 3. Alle Eingabedateien erzeugen (INCAR, KPOINTS, POSCAR, POTCAR)
 calc.write_input(atoms)
 
-print("Alle Eingabedateien für die Relaxation wurden erstellt.")
+print("Alle Eingabedateien für die Relaxation wurden in relaxation/ erstellt.")
