@@ -47,19 +47,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-plt.rcParams.update(
-    {
-        "font.family": "serif",  # use serif/main font for text elements
-        "text.usetex": True,  # use inline math for ticks
-        "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-        "axes.labelsize": 17,  # axis labels
-        "legend.fontsize": 20,  # legend
-        "xtick.labelsize": 15,  # x tick labels
-        "ytick.labelsize": 15,  # y tick labels
-    }
-)
-
-
 try:  # structural analysis is optional; degrade gracefully if ASE is absent
     from ase.io import read as _ase_read
 except Exception:  # pragma: no cover
@@ -95,6 +82,16 @@ DESCRIPTORS = [
     ("d_metalN_mean", "mean metal–N bond (Å)"),
     ("d_metalN_std", "metal–N bond disorder σ (Å)"),
 ]
+
+STYLE = {
+    "font.family": "serif",  # use serif/main font for text elements
+    "text.usetex": True,  # use inline math for ticks
+    "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+    "axes.labelsize": 20,  # axis labels
+    "legend.fontsize": 20,  # legend
+    "xtick.labelsize": 17,  # x tick labels
+    "ytick.labelsize": 17,  # y tick labels
+}
 
 
 @dataclass
@@ -268,6 +265,9 @@ def collect(results_dir: Path) -> list[Branch]:
 # --------------------------------------------------------------------------- #
 def plot_bandgap_distribution(branches: list[Branch], out: Path) -> None:
     """Box + jittered-scatter of band gaps per branch."""
+
+    plt.rcParams.update(STYLE)
+
     data = [b.gaps for b in branches]
     labels = [b.label for b in branches]
     rng = np.random.default_rng(0)
@@ -306,6 +306,9 @@ def plot_bandgap_distribution(branches: list[Branch], out: Path) -> None:
 
 
 def plot_bandgap_vs_temperature(branches: list[Branch], out: Path) -> None:
+
+    plt.rcParams.update(STYLE)
+
     """Mean band gap +/- std vs branch sort key (temperature)."""
     xs, means, stds = [], [], []
     for b in branches:
