@@ -1,0 +1,48 @@
+digraph FlowOtter {
+	fontsize=12 labelloc=t rankdir=LR
+	node [fontname=Helvetica shape=box style="rounded,filled"]
+	input [label="input config
+YAML file" fillcolor="#f2f2e9" shape=ellipse]
+	subgraph cluster_md {
+		color=black label="Molecular Dynamics" penwidth=2
+		md1 [label="LAMMPS
+FF-MD" fillcolor="#d9e6f2"]
+		md2 [label="LAMMPS
+VASP
+ML-MD" fillcolor="#d9e6f2"]
+		md3 [label="LAMMPS
+MACE-MD" fillcolor="#d9e6f2"]
+	}
+	test_eq [label="test for
+equilibration
+and plausibility" fillcolor="#ead1dc"]
+	subgraph cluster_eh {
+		color=black label="Electronic Hamiltonians" penwidth=2
+		eh1 [label="empirical
+TB fit" fillcolor="#d9ead3"]
+		eh2 [label="Hamster
+ML-H" fillcolor="#d9ead3"]
+		eh3 [label=DFT fillcolor="#d9ead3"]
+	}
+	test_ham [label="plausibility test
+of Hamiltonian" fillcolor="#ead1dc"]
+	subgraph cluster_opt {
+		color=black label=Optoelectronics penwidth=2
+		opt1 [label="MD + Kubo model" fillcolor="#fff2cc"]
+		opt2 [label="band gap & DOS" fillcolor="#fff2cc"]
+	}
+	input -> md1
+	input -> md2
+	input -> md3
+	md1 -> test_eq
+	md2 -> test_eq
+	md3 -> test_eq
+	test_eq -> eh1
+	test_eq -> eh2
+	test_eq -> eh3
+	eh1 -> test_ham
+	eh2 -> test_ham
+	eh3 -> test_ham
+	test_ham -> opt1
+	test_ham -> opt2
+}

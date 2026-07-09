@@ -37,16 +37,17 @@ PALETTE = ["#2a78d6", "#1baf7a", "#eda100", "#4a3aa7", "#e34948", "#eb6834"]
 TOTAL_FILL = "#d9d8d4"
 TOTAL_LINE = "#6f6e6a"
 FERMI_LINE = "#52514e"
+FIG_SIZE = (6.0, 4.2)  # width, height in inches
 
 plt.rcParams.update(
     {
         "font.family": "serif",  # use serif/main font for text elements
         "text.usetex": True,  # use inline math for ticks
         "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-        "axes.labelsize": 14,  # axis labels
-        "legend.fontsize": 12,  # legend
-        "xtick.labelsize": 12,  # x tick labels
-        "ytick.labelsize": 12,  # y tick labels
+        "axes.labelsize": 17,  # axis labels
+        "legend.fontsize": 20,  # legend
+        "xtick.labelsize": 15,  # x tick labels
+        "ytick.labelsize": 15,  # y tick labels
     }
 )
 
@@ -100,7 +101,7 @@ def _window_max(energy, dos_list, emin, emax):
 # Figures
 # ---------------------------------------------------------------------------
 def plot_total(cdos, energy, emin, emax, spin, gap, outfile):
-    fig, ax = plt.subplots(figsize=(7.0, 4.2))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     up, down = _densities(cdos)
     ax.plot(energy, up, color=TOTAL_LINE, lw=1.4)
     ax.fill_between(energy, up, color=TOTAL_FILL)
@@ -112,15 +113,15 @@ def plot_total(cdos, energy, emin, emax, spin, gap, outfile):
     _decorate(ax, emin, emax, spin, ymax)
 
     # Fermi label + gap annotation
-    ax.text(
-        0.0,
-        ymax * 0.96,
-        r"  $E_\mathrm{F}$",
-        color=FERMI_LINE,
-        va="top",
-        ha="left",
-        fontsize=9,
-    )
+    # ax.text(
+    #     0.0,
+    #     ymax * 0.96,
+    #     r"  $E_\mathrm{F}$",
+    #     color=FERMI_LINE,
+    #     va="top",
+    #     ha="left",
+    #     fontsize=9,
+    # )
     # if gap and gap > 0.01:
     #     ax.set_title(f"TaCuN$_2$ — total DOS (gap = {gap:.2f} eV)")
     # else:
@@ -139,7 +140,7 @@ def plot_element(cdos, energy, emin, emax, spin, outfile):
     # stable, readable order
     elements = sorted(el_dos, key=lambda e: e.symbol)
 
-    fig, ax = plt.subplots(figsize=(7.0, 4.2))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     for i, el in enumerate(elements):
         _plot_series(ax, energy, el_dos[el], PALETTE[i % len(PALETTE)], el.symbol)
 

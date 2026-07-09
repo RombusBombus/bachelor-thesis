@@ -1,0 +1,42 @@
+// DFT Workflow Manager
+digraph Workflow_Diagram {
+	rankdir=TB
+	ranksep="0.5 consecutive"
+	nodesep=0.2
+	node [fontname=Helvetica fontsize=11 height=0.1 margin="0.1,0.05" shape=box style=filled]
+	edge [arrowhead=vee arrowsize=0.7 fontname=Helvetica fontsize=10]
+	MGR [label="Workflow Manager
+(Automation & Orchestration)" fillcolor="#2C3E50" fontcolor=white penwidth=2 shape=plaintext]
+	MD1 [label="MD Trajectory 1
+(NVT/NPT Ensemble)" fillcolor="#3498DB" fontcolor=white]
+	MD_DOTS [label="..." fontcolor=black fontsize=16 shape=plaintext]
+	MD_N [label="MD Trajectory N
+(NVT/NPT Ensemble)" fillcolor="#3498DB" fontcolor=white]
+	S1 [label="Snapshot 1" fillcolor="#E67E22" fontcolor=white]
+	S2 [label="Snapshot 2" fillcolor="#E67E22" fontcolor=white]
+	S_DOTS [label="..." fontcolor=black fontsize=16 shape=plaintext]
+	S_M [label="Snapshot M" fillcolor="#E67E22" fontcolor=white]
+	DFT [label="Aggregation over
+Snapshots" fillcolor="#2ECC71" fontcolor=white penwidth=1.5 shape=hexagonal]
+	BG [label="Band Gap" fillcolor="#9B59B6" fontcolor=white]
+	DOS [label="Density of States
+(DOS)" fillcolor="#9B59B6" fontcolor=white]
+	MGR -> MD1
+	MGR -> MD_DOTS [arrowhead=none style=dotted]
+	MGR -> MD_N
+	MD1 -> S1
+	MD1 -> S2
+	MD1 -> S_DOTS [arrowhead=none style=dotted]
+	MD1 -> S_M
+	S1 -> DFT
+	S2 -> DFT
+	S_M -> DFT
+	DFT -> BG
+	DFT -> DOS
+	{
+		rank=same
+		S1
+		S2
+		S_M
+	}
+}

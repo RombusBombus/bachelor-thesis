@@ -46,6 +46,20 @@ matplotlib.use("Agg")  # headless: just write files
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+plt.rcParams.update(
+    {
+        "font.family": "serif",  # use serif/main font for text elements
+        "text.usetex": True,  # use inline math for ticks
+        "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+        "axes.labelsize": 17,  # axis labels
+        "legend.fontsize": 20,  # legend
+        "xtick.labelsize": 15,  # x tick labels
+        "ytick.labelsize": 15,  # y tick labels
+    }
+)
+
+
 try:  # structural analysis is optional; degrade gracefully if ASE is absent
     from ase.io import read as _ase_read
 except Exception:  # pragma: no cover
@@ -306,7 +320,7 @@ def plot_bandgap_vs_temperature(branches: list[Branch], out: Path) -> None:
     ax.errorbar(xs, means, yerr=stds, marker="o", capsize=4, color="tab:red", lw=1.5)
     ax.set_xlabel("MD temperature (K)")
     ax.set_ylabel("Mean band gap (eV)")
-    ax.set_title("Mean band gap vs. temperature (error bars = std over snapshots)")
+    # ax.set_title("Mean band gap vs. temperature (error bars = std over snapshots)")
     ax.grid(alpha=0.3)
     fig.tight_layout()
     # fig.savefig(out, dpi=150)

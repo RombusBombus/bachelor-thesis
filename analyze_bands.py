@@ -163,6 +163,21 @@ def main():
     axes[0].set_ylim(args.emin, args.emax)
     axes[0].set_ylabel(ylabel)
 
+    # mark the valence band maximum and the conduction band minimum
+    # with two colored dots
+    if not metal:
+        vbm_kpt = bs.get_vbm()["kpoint"].frac_coords
+        cbm_kpt = bs.get_cbm()["kpoint"].frac_coords
+        for ax, br in zip(axes, branches):
+            d = br["dist"]
+            k0, k1 = kpts[br["i0"]], kpts[br["i1"]]
+            if np.allclose(vbm_kpt, k0) or np.allclose(vbm_kpt, k1):
+                ax.plot(d[0] if np.allclose(vbm_kpt, k0) else d[-1], 0.0,
+                        "o", color=GAP_FILL, ms=10)
+            if np.allclose(cbm_kpt, k0) or np.allclose(cbm_kpt, k1):
+                ax.plot(d[0] if np.allclose(cbm_kpt, k0) else d[-1], cbm - zero,
+                        "o", color=GAP_FILL, ms=10)
+
     outfile = outdir / "band_structure.pdf"
     fig.savefig(outfile, bbox_inches="tight")
     plt.close(fig)
