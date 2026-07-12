@@ -236,3 +236,6 @@ secret.txt
 /dos
 
 XDATCAR_*
+mdanalysis/
+
+energies_per_frame_*.csv
