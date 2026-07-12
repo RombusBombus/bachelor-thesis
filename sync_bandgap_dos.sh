@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# Sync bandgap.log and DOSCAR files from the fritz cluster into ./cluster_results
+# Sync bandgap.log, DOSCAR, and POSCAR files from the fritz cluster into ./cluster_results
 # Wipes cluster_results/ first, then re-fetches a fresh copy via SSH config entry "fau_fritz".
 
 set -euo pipefail
 
 REMOTE_BASE="/home/atuin/b299bb/b299bb25"
-REMOTE_DIRS=(flow-otter-test flow-otter-test-DFTU)
+REMOTE_DIRS=(flow-otter-test flow-otter-CuTaN2-5T)
 LOCAL_DIR="cluster_results"
 SECRET_FILE="secret.txt"
 
@@ -15,6 +15,8 @@ RSYNC_OPTS=(
   --prune-empty-dirs
   --include "*/"
   --include "DOSCAR"
+  --include "POSCAR"
+  --include "EIGENVAL"
   --include "bandgap.log"
   --exclude "*"
 )
@@ -41,6 +43,7 @@ for dir in "${REMOTE_DIRS[@]}"; do
   mkdir -p "${LOCAL_DIR}/${dir}"
   rsync "${RSYNC_OPTS[@]}" \
     "fau_fritz:${REMOTE_BASE}/${dir}/" "${LOCAL_DIR}/${dir}/"
+  sleep 1
 done
 
 echo "Sync complete."

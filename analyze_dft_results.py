@@ -84,13 +84,13 @@ DESCRIPTORS = [
 ]
 
 STYLE = {
-    "font.family": "serif",  # use serif/main font for text elements
-    "text.usetex": True,  # use inline math for ticks
-    "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-    "axes.labelsize": 20,  # axis labels
-    "legend.fontsize": 20,  # legend
-    "xtick.labelsize": 17,  # x tick labels
-    "ytick.labelsize": 17,  # y tick labels
+    # "font.family": "serif",  # use serif/main font for text elements
+    # "text.usetex": True,  # use inline math for ticks
+    # "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+    # "axes.labelsize": 20,  # axis labels
+    # "legend.fontsize": 20,  # legend
+    # "xtick.labelsize": 17,  # x tick labels
+    # "ytick.labelsize": 17,  # y tick labels
 }
 
 
@@ -400,7 +400,7 @@ def plot_dos_overlay(branches: list[Branch], out: Path) -> None:
     ax.axvline(0.0, color="k", ls="--", lw=1)
     ax.set_xlabel(r"$E - E_\mathrm{F}$ (eV)")
     ax.set_ylabel("Mean DOS (states/eV)")
-    ax.set_title("Ensemble-mean total DOS by temperature")
+    # ax.set_title("Ensemble-mean total DOS by temperature")
     ax.legend()
     ax.grid(alpha=0.3)
     fig.tight_layout()
@@ -529,6 +529,9 @@ def plot_gap_vs_distance(
 ) -> None:
     """Scatter of band gap vs. each chosen descriptor, coloured by branch,
     with a pooled linear fit overlaid."""
+
+    plt.rcParams.update(STYLE)
+
     keys = [k for k in keys if any(k in s.desc for b in branches for s in b.snapshots)]
     if not keys:
         return
@@ -579,7 +582,6 @@ def plot_gap_vs_distance(
     for ax in axes[len(keys) :]:
         ax.set_visible(False)
     fig.tight_layout()
-    # fig.savefig(out, dpi=150)
     fig.savefig(out, dpi=150, bbox_inches="tight", format="pdf")
     plt.close(fig)
 
@@ -656,17 +658,17 @@ def print_summary(branches: list[Branch]) -> None:
 
 def main() -> None:
 
-    plt.rcParams.update(
-        {
-            "font.family": "serif",  # use serif/main font for text elements
-            "text.usetex": True,  # use inline math for ticks
-            "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-            "axes.labelsize": 14,  # axis labels
-            "legend.fontsize": 12,  # legend
-            "xtick.labelsize": 12,  # x tick labels
-            "ytick.labelsize": 12,  # y tick labels
-        }
-    )
+    # plt.rcParams.update(
+    #     {
+    #         "font.family": "serif",  # use serif/main font for text elements
+    #         "text.usetex": True,  # use inline math for ticks
+    #         "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+    #         "axes.labelsize": 14,  # axis labels
+    #         "legend.fontsize": 12,  # legend
+    #         "xtick.labelsize": 12,  # x tick labels
+    #         "ytick.labelsize": 12,  # y tick labels
+    #     }
+    # )
 
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -721,6 +723,12 @@ def main() -> None:
             rows,
             outdir / "gap_vs_distance.pdf",
             keys=["d_metalN_mean", "d_metalN_std", "d_CuN_mean", "d_TaN_mean"],
+        )
+        plot_gap_vs_distance(
+            branches,
+            rows,
+            outdir / "gap_vs_distance_all_descriptors.pdf",
+            keys=[k for k, _ in DESCRIPTORS],
         )
         plot_correlation_bars(rows, outdir / "gap_distance_correlation.pdf")
     elif _ase_read is None:
