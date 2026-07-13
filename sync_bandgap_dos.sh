@@ -21,8 +21,8 @@ RSYNC_OPTS=(
   --exclude "*"
 )
 
-echo "Removing existing ${LOCAL_DIR}/ ..."
-rm -rf "${LOCAL_DIR}"
+# echo "Removing existing ${LOCAL_DIR}/ ..."
+# rm -rf "${LOCAL_DIR}"
 
 echo "Unlocking SSH key ..."
 eval "$(ssh-agent -s)" > /dev/null

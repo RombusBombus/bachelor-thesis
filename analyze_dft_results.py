@@ -84,13 +84,13 @@ DESCRIPTORS = [
 ]
 
 STYLE = {
-    # "font.family": "serif",  # use serif/main font for text elements
-    # "text.usetex": True,  # use inline math for ticks
-    # "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-    # "axes.labelsize": 20,  # axis labels
-    # "legend.fontsize": 20,  # legend
-    # "xtick.labelsize": 17,  # x tick labels
-    # "ytick.labelsize": 17,  # y tick labels
+    "font.family": "serif",  # use serif/main font for text elements
+    "text.usetex": True,  # use inline math for ticks
+    "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+    "axes.labelsize": 20,  # axis labels
+    "legend.fontsize": 20,  # legend
+    "xtick.labelsize": 17,  # x tick labels
+    "ytick.labelsize": 17,  # y tick labels
 }
 
 
@@ -409,6 +409,65 @@ def plot_dos_overlay(branches: list[Branch], out: Path) -> None:
     plt.close(fig)
 
 
+
+
+def plot_bandgap_boxplot_and_temperature(branches: list[Branch], out: Path) -> None:
+    """Boxplot and mean vs temperature side by side."""
+
+    plt.rcParams.update(STYLE)
+
+    data = [b.gaps for b in branches]
+    labels = [b.label for b in branches]
+    rng = np.random.default_rng(0)
+
+    xs, means, stds = [], [], []
+    for b in branches:
+        g = b.gaps
+        if len(g) == 0:
+            continue
+        xs.append(b.sort_key)
+        means.append(g.mean())
+        stds.append(g.std(ddof=1) if len(g) > 1 else 0.0)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+    # Left subplot: boxplot
+    try:
+        ax1.boxplot(
+            data,
+            tick_labels=labels,
+            showfliers=False,
+            widths=0.5,
+            medianprops=dict(color="black"),
+        )
+    except TypeError:
+        ax1.boxplot(
+            data,
+            labels=labels,
+            showfliers=False,
+            widths=0.5,
+            medianprops=dict(color="black"),
+        )
+    for i, gaps in enumerate(data, start=1):
+        if len(gaps) == 0:
+            continue
+        x = rng.normal(i, 0.05, size=len(gaps))
+        ax1.scatter(x, gaps, alpha=0.7, color="tab:blue", zorder=3, s=30)
+    ax1.set_xlabel("MD temperature")
+    ax1.set_ylabel("Band gap (eV)")
+    ax1.grid(axis="y", alpha=0.3)
+
+    # Right subplot: mean vs temperature
+    ax2.errorbar(xs, means, yerr=stds, marker="o", capsize=4, color="tab:red", lw=1.5)
+    ax2.set_xlabel("MD temperature (K)")
+    ax2.set_ylabel("Mean band gap (eV)")
+    ax2.grid(alpha=0.3)
+
+    fig.tight_layout()
+    fig.savefig(out, dpi=150, bbox_inches="tight", format="pdf")
+    plt.close(fig)
+
+
 # --------------------------------------------------------------------------- #
 # Band gap vs. interatomic distance
 # --------------------------------------------------------------------------- #
@@ -530,7 +589,7 @@ def plot_gap_vs_distance(
     """Scatter of band gap vs. each chosen descriptor, coloured by branch,
     with a pooled linear fit overlaid."""
 
-    plt.rcParams.update(STYLE)
+    plt.rcParams.update({})
 
     keys = [k for k in keys if any(k in s.desc for b in branches for s in b.snapshots)]
     if not keys:
@@ -587,6 +646,8 @@ def plot_gap_vs_distance(
 
 
 def plot_correlation_bars(rows: list[dict], out: Path) -> None:
+    plt.rcParams.update({})
+
     """Bar chart comparing pooled vs. within-temperature Pearson r per descriptor."""
     if not rows:
         return
@@ -711,6 +772,7 @@ def main() -> None:
     plot_bandgap_vs_temperature(branches, outdir / "bandgap_vs_temperature.pdf")
     plot_dos(branches, outdir / "dos_per_branch.pdf")
     plot_dos_overlay(branches, outdir / "dos_overlay.pdf")
+    plot_bandgap_boxplot_and_temperature(branches, outdir / "bandgap_boxplot_and_temperature.pdf")
 
     # band gap vs. interatomic distance
     n_desc = sum(1 for b in branches for s in b.snapshots if s.desc)

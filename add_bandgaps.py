@@ -16,6 +16,13 @@ def main() -> None:
 			print(f"Skipping {snapshot_dir} because EIGENVAL file is missing.")
 			continue
 
+		# skip if output_file already exists
+		if output_file.is_file():
+			print(f"Skipping {snapshot_dir} because bandgap.log already exists.")
+			continue
+
+		print(snapshot_dir)
+
 		with output_file.open("w") as f:
 			subprocess.run(
 				[

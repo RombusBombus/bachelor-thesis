@@ -239,3 +239,6 @@ XDATCAR_*
 mdanalysis/
 
 energies_per_frame_*.csv
+
+*.pdf
+*.csv
