@@ -14,7 +14,7 @@ ENCUT = 520
 # k-Punkte: Die Zelle ist stark anisotrop (a = b = 3.15 A, c = 17.54 A).
 # Reziprok ist die c-Achse ~6x kuerzer als a/b, daher ein anisotropes,
 # Gamma-zentriertes Netz (Gamma-zentriert ist fuer hexagonale Symmetrie noetig).
-KPOINTS_MESH = (9, 9, 2)
+KPOINTS_MESH = (9, 9, 9)
 
 # Relaxationsparameter
 ISIF = 3          # relaxiere Ionen, Zellform und Volumen
@@ -55,7 +55,7 @@ calc = Vasp(
     ncore=NCORE,
     lwave=True,                 # WAVECAR schreiben (fuer Restart aus CONTCAR)
     lcharg=True,                # CHGCAR schreiben
-    directory='relaxation',     # Eingabedateien nach relaxation/ schreiben
+    directory='relaxation999',     # Eingabedateien nach relaxation/ schreiben
 )
 
 # 3. Alle Eingabedateien erzeugen (INCAR, KPOINTS, POSCAR, POTCAR)
