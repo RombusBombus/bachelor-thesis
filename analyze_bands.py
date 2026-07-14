@@ -99,10 +99,12 @@ def main():
 
     metal = bs.is_metal()
     if metal:
+        print("Metal: energies referenced to the Fermi level (E_F -> 0)")
         zero = bs.efermi
         ylabel = r"$E - E_\mathrm{F}$ (eV)"
         cbm = None
     else:
+        print("Semiconductor: energies referenced to the valence-band maximum (VBM -> 0)")
         zero = bs.get_vbm()["energy"]
         cbm = bs.get_cbm()["energy"]
         ylabel = r"$E - E_\mathrm{VBM}$ (eV)"
@@ -153,7 +155,8 @@ def main():
         # reference line (VBM or E_F) and shaded gap
         ax.axhline(0.0, color=ZERO_LINE, lw=1.0, ls="--")
         if not metal:
-            ax.axhspan(0.0, cbm - zero, color=GAP_FILL, alpha=0.12, lw=0)
+            # ax.axhspan(0.0, cbm - zero, color=GAP_FILL, alpha=0.12, lw=0)
+            pass
 
         ax.set_xlim(d[0], d[-1])
         ax.set_xticks([d[0], d[-1]])
