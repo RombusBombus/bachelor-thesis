@@ -57,6 +57,11 @@ try:  # scipy gives us Spearman + clean p-values; fall back to numpy otherwise
 except Exception:  # pragma: no cover
     _scipy_stats = None
 
+try:  # optional nonlinear fit for the Varshni model
+    from scipy import optimize as _scipy_optimize
+except Exception:  # pragma: no cover
+    _scipy_optimize = None
+
 # matches e.g. "The value for bandgap is: 0.69133."  (trailing period is fine)
 _BANDGAP_RE = re.compile(r"bandgap is:\s*([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)")
 
@@ -321,12 +326,61 @@ def plot_bandgap_vs_temperature(branches: list[Branch], out: Path) -> None:
 
     fig, ax = plt.subplots(figsize=(7, 5))
     ax.errorbar(xs, means, yerr=stds, marker="o", capsize=4, color="tab:red", lw=1.5)
+
+    # Varshni model: Eg(T) = Eg(0) - alpha * T^2 / (T + beta)
+    if _scipy_optimize is not None and len(xs) >= 3:
+        def varshni(t, eg0, alpha, beta):
+            return eg0 - alpha * t**2 / (t + beta)
+
+        xfit = np.asarray(xs, dtype=float)
+        yfit = np.asarray(means, dtype=float)
+        p0 = (float(yfit.max()), 1e-4, 300.0)
+        bounds = ([0.0, 0.0, 1e-9], [np.inf, np.inf, np.inf])
+        try:
+            popt, _ = _scipy_optimize.curve_fit(
+                varshni, xfit, yfit, p0=p0, bounds=bounds, maxfev=10000
+            )
+            xgrid = np.linspace(xfit.min(), xfit.max(), 300)
+            ax.plot(
+                xgrid,
+                varshni(xgrid, *popt),
+                color="tab:blue",
+                lw=2,
+                label=rf"Varshni fit: $E_g(0)$={popt[0]:.3f} eV",
+            )
+            ax.legend()
+        except Exception:
+            pass
+
     ax.set_xlabel("MD temperature (K)")
     ax.set_ylabel("Mean band gap (eV)")
     # ax.set_title("Mean band gap vs. temperature (error bars = std over snapshots)")
     ax.grid(alpha=0.3)
     fig.tight_layout()
     # fig.savefig(out, dpi=150)
+    fig.savefig(out, dpi=150, bbox_inches="tight", format="pdf")
+    plt.close(fig)
+
+
+def plot_bandgap_std_vs_temperature(branches: list[Branch], out: Path) -> None:
+    """Standard deviation of band gaps vs branch sort key (temperature)."""
+
+    plt.rcParams.update(STYLE)
+
+    xs, stds = [], []
+    for b in branches:
+        g = b.gaps
+        if len(g) == 0:
+            continue
+        xs.append(b.sort_key)
+        stds.append(g.std(ddof=1) if len(g) > 1 else 0.0)
+
+    fig, ax = plt.subplots(figsize=(7, 5))
+    ax.plot(xs, stds, marker="o", color="tab:green", lw=1.5)
+    ax.set_xlabel("MD temperature (K)")
+    ax.set_ylabel("Band gap standard deviation (eV)")
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
     fig.savefig(out, dpi=150, bbox_inches="tight", format="pdf")
     plt.close(fig)
 
@@ -770,6 +824,7 @@ def main() -> None:
     write_csv(branches, outdir / "bandgaps.csv")
     plot_bandgap_distribution(branches, outdir / "bandgap_distribution.pdf")
     plot_bandgap_vs_temperature(branches, outdir / "bandgap_vs_temperature.pdf")
+    plot_bandgap_std_vs_temperature(branches, outdir / "bandgap_std_vs_temperature.pdf")
     plot_dos(branches, outdir / "dos_per_branch.pdf")
     plot_dos_overlay(branches, outdir / "dos_overlay.pdf")
     plot_bandgap_boxplot_and_temperature(branches, outdir / "bandgap_boxplot_and_temperature.pdf")
