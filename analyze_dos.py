@@ -39,17 +39,17 @@ TOTAL_LINE = "#6f6e6a"
 FERMI_LINE = "#52514e"
 FIG_SIZE = (6.0, 4.2)  # width, height in inches
 
-plt.rcParams.update(
-    {
-        "font.family": "serif",  # use serif/main font for text elements
-        "text.usetex": True,  # use inline math for ticks
-        "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-        "axes.labelsize": 17,  # axis labels
-        "legend.fontsize": 20,  # legend
-        "xtick.labelsize": 15,  # x tick labels
-        "ytick.labelsize": 15,  # y tick labels
-    }
-)
+# plt.rcParams.update(
+#     {
+#         "font.family": "serif",  # use serif/main font for text elements
+#         "text.usetex": True,  # use inline math for ticks
+#         "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+#         "axes.labelsize": 17,  # axis labels
+#         "legend.fontsize": 20,  # legend
+#         "xtick.labelsize": 15,  # x tick labels
+#         "ytick.labelsize": 15,  # y tick labels
+#     }
+# )
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -127,6 +127,7 @@ def plot_total(cdos, energy, emin, emax, spin, gap, outfile):
     # else:
     #     ax.set_title("TaCuN$_2$ — total DOS (metallic)")
 
+    plt.title("Total DOS")
     ax.set_xlabel(r"$E - E_\mathrm{F}$ (eV)")
     ax.set_ylabel("DOS (states / eV)")
     plt.grid()
@@ -149,6 +150,7 @@ def plot_element(cdos, energy, emin, emax, spin, outfile):
     # ax.set_title("TaCuN$_2$ — element-projected DOS")
     ax.set_xlabel(r"$E - E_\mathrm{F}$ (eV)")
     ax.set_ylabel("DOS (states / eV)")
+    plt.title("Element-Projected DOS")
     ax.legend(loc="upper right")
     plt.grid()
     fig.tight_layout()

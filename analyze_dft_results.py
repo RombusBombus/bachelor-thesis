@@ -89,13 +89,13 @@ DESCRIPTORS = [
 ]
 
 STYLE = {
-    "font.family": "serif",  # use serif/main font for text elements
-    "text.usetex": True,  # use inline math for ticks
-    "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-    "axes.labelsize": 20,  # axis labels
-    "legend.fontsize": 20,  # legend
-    "xtick.labelsize": 17,  # x tick labels
-    "ytick.labelsize": 17,  # y tick labels
+    # "font.family": "serif",  # use serif/main font for text elements
+    # "text.usetex": True,  # use inline math for ticks
+    # "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+    # "axes.labelsize": 20,  # axis labels
+    # "legend.fontsize": 20,  # legend
+    # "xtick.labelsize": 17,  # x tick labels
+    # "ytick.labelsize": 17,  # y tick labels
 }
 
 
@@ -303,6 +303,7 @@ def plot_bandgap_distribution(branches: list[Branch], out: Path) -> None:
     ax.set_xlabel("MD temperature")
     ax.set_ylabel("Band gap (eV)")
     # ax.set_title("DFT band gap distribution per snapshot ensemble")
+    ax.set_title("Band gap distributions")
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
     # fig.savefig(out, dpi=150)
@@ -355,6 +356,7 @@ def plot_bandgap_vs_temperature(branches: list[Branch], out: Path) -> None:
     ax.set_xlabel("MD temperature (K)")
     ax.set_ylabel("Mean band gap (eV)")
     # ax.set_title("Mean band gap vs. temperature (error bars = std over snapshots)")
+    ax.set_title("Mean band gap vs. temperature")
     ax.grid(alpha=0.3)
     fig.tight_layout()
     # fig.savefig(out, dpi=150)
@@ -455,6 +457,7 @@ def plot_dos_overlay(branches: list[Branch], out: Path) -> None:
     ax.set_xlabel(r"$E - E_\mathrm{F}$ (eV)")
     ax.set_ylabel("Mean DOS (states/eV)")
     # ax.set_title("Ensemble-mean total DOS by temperature")
+    ax.set_title("Ensemble-mean total DOS by temperature")
     ax.legend()
     ax.grid(alpha=0.3)
     fig.tight_layout()

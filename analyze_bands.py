@@ -40,17 +40,17 @@ BAND_COLOR = "#2a78d6"   # valence/conduction bands
 ZERO_LINE = "#52514e"    # VBM / Fermi reference
 GAP_FILL = "#eda100"     # shaded band gap
 
-plt.rcParams.update(
-    {
-        "font.family": "serif",  # use serif/main font for text elements
-        "text.usetex": True,  # use inline math for ticks
-        "pgf.rcfonts": False,  # don't setup fonts from rc parameters
-        "axes.labelsize": 14,  # axis labels
-        "legend.fontsize": 12,  # legend
-        "xtick.labelsize": 12,  # x tick labels
-        "ytick.labelsize": 12,  # y tick labels
-    }
-)
+# plt.rcParams.update(
+#     {
+#         "font.family": "serif",  # use serif/main font for text elements
+#         "text.usetex": True,  # use inline math for ticks
+#         "pgf.rcfonts": False,  # don't setup fonts from rc parameters
+#         "axes.labelsize": 14,  # axis labels
+#         "legend.fontsize": 12,  # legend
+#         "xtick.labelsize": 12,  # x tick labels
+#         "ytick.labelsize": 12,  # y tick labels
+#     }
+# )
 
 # Pretty labels for the high-symmetry points read from KPOINTS
 POINT_LABELS = {
@@ -142,6 +142,7 @@ def main():
         1, len(branches), sharey=True, figsize=(7.0, 4.6),
         gridspec_kw={"width_ratios": [b["length"] for b in branches], "wspace": 0.06},
     )
+    fig.suptitle("CuTaN$_2$ band structure", fontsize=16)
     if len(branches) == 1:
         axes = [axes]
 
