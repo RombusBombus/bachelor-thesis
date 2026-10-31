@@ -2,13 +2,15 @@
 #
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=72
-#SBATCH --time=00:45:00
+#SBATCH --time=2:00:00
 #SBATCH --export=NONE
+#SBATCH --mail-user=neumeier.nicolas.1@gmail.com
+#SBATCH --mail-type=ALL
 
 unset SLURM_EXPORT_ENV
 
 module use /home/atuin/b299bb/TheoFEM/Modules/
-module load VASP/6.6.0_intel
+module load VASP/6.6.0_intel_hdf5
 
 cd $SLURM_SUBMIT_DIR
 
@@ -26,5 +28,4 @@ echo "SLURM_NODELIST=$SLURM_NODELIST"
 pwd
 } > "$outfile"
 
-export FI_PROVIDER=tcp
-mpirun vasp_std > vasp.log
+srun vasp_std > vasp.log
